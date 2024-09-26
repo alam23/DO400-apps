@@ -44,4 +44,14 @@ public class SolverIT {
     public void solve_error() {
         given().when().get("error").then().statusCode(400);
     }
+
+    @Test
+    public void solve_multiply() {
+        expectEquationSolution("5*2", "10.0");
+    }
+
+    @Test
+    public void solve_multiply_composition() {
+        expectEquationSolution("5*2*3", "30.0");
+    }
 }

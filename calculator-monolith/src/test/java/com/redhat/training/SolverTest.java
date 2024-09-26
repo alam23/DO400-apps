@@ -48,4 +48,19 @@ public class SolverTest {
     public void solve_error() {
         assertThrows(WebApplicationException.class, () -> solverService.solve("5+"));
     }
+
+    @Test
+    public void solve_multiply() {
+        assertEquals(solverService.solve("5*2"), 10);
+    }
+
+    @Test
+    public void solve_multiply_composition(){
+        assertEquals(solverService.solve("5*2*3"), 30);
+    }
+
+    @Test
+    public void solve_multiply_prioritize_multiplication(){
+        assertEquals(solverService.solve("4+5*2"), 14);
+    }
 }
