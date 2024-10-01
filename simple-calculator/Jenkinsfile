@@ -1,0 +1,24 @@
+pipeline {
+    agent { node { label 'maven' } }
+    options { skipDefaultCheckout true }
+    stages {
+        stage('Prepare') {
+            steps {
+                sh 'chmod +x mvnw'
+            }
+        }
+        stage('Checkout') {
+            steps {
+                git branch: 'notifications',
+                    url: 'https://github.com/alam23/DO400-apps'
+            }
+        }
+        stage('Test') {
+            steps {
+                dir('simple-calculator') {
+                    sh './mvnw clean test'
+                }
+            }
+        }
+    }
+}
