@@ -1,6 +1,6 @@
 pipeline {
     agent { node { label 'maven' } }
-    environment { APP_NAMESPACE = 'alam23-recover' }
+    environment { APP_NAMESPACE = 'omjoyb-recover' }
     stages {
         stage('Test') {
             options { timeout(time: 50, unit: 'SECONDS') }
@@ -21,6 +21,25 @@ pipeline {
                         -p $QUAY_PSW \
                         -b $BUILD_NUMBER
                     '''
+                }
+            }
+        }
+        stage('Deploy') {
+            environment { QUAY = credentials('QUAY_USER') }
+            steps {
+                dir('shopping-cart-v2') {
+                    script {
+                        def status = sh(
+                            script: "./scripts/tag-exists-in-quay.sh $QUAY_USR/do400-recover latest",
+                            returnStatus: true
+                        )
+
+                        if (status != 0) {
+                            error("Tag not found in Quay!")
+                        }
+                    }
+
+                    sh './scripts/redeploy.sh $APP_NAMESPACE'
                 }
             }
         }
